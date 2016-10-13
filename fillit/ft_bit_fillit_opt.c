@@ -67,27 +67,26 @@ int			ft_bitfit(int pos, char *tet_u, int *ien0, t_ull *lmap)
 	t_ull			tmp;
 	int				ien[3];
 
-	ien[0] = -1;
+	ien[0] = ien0[0];
 	while (++ien[0] < g_tnum)
-		if (!tet_u[ien[0]])
+	{
+		while (++pos < g_size * g_size)
 		{
-			while (++pos < g_size * g_size)
+			if (!(pos % g_size) || !tmp)
+				ft_map_reset(&tmp, lmap, pos / g_size, pos % g_size);
+			if (!(tmp & g_tet[ien[0]]))
 			{
-				if (!(pos % g_size) || !tmp)
-					ft_map_reset(&tmp, lmap, pos / g_size, pos % g_size);
-				if (!(tmp & g_tet[ien[0]]))
-				{
-					ien[2] = ien0[2] - 1;
-					ft_placeit(pos, ien, tet_u, lmap);
-					g_sol[ien[0]] = pos + 1;
-					if (ien[2] == 0 || ft_bitfit(-1, tet_u, ien, lmap))
-						return (1);
-					ft_placeit(pos, ien, tet_u, lmap);
-				}
-				tmp = tmp >> 1;
+				ien[2] = ien0[2] - 1;
+				ft_placeit(pos, ien, tet_u, lmap);
+				g_sol[ien[0]] = pos + 1;
+				if (ien[2] == 0 || ft_bitfit(-1, tet_u, ien, lmap))
+					return (1);
+				ft_placeit(pos, ien, tet_u, lmap);
 			}
-			return (0);
+			tmp = tmp >> 1;
 		}
+		return (0);
+	}
 	return (0);
 }
 
@@ -105,7 +104,7 @@ void		global_init(int num, int size, char (*tet_u)[27], int *ien0)
 		g_sol[num] = '\0';
 		g_bsol[num] = '\0';
 	}
-	ien0[0] = 0;
+	ien0[0] = -1;
 	ien0[1] = 0;
 	ien0[2] = g_tnum;
 }

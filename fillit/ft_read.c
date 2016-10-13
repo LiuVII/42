@@ -12,7 +12,7 @@
 
 #include "fillit.h"
 #include "libft.h"
-#define BUFF_SIZE 600
+#define BUFF_SIZE 550
 
 char	g_var_tet[19][4][4] = {
 	{ {"##.."}, {"##.."}, {"...."}, {"...."} },
@@ -147,15 +147,17 @@ t_tet		*ft_read_file(int fd, int *tn)
 	buff = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1));
 	if (!buff)
 		return (NULL);
-	if ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	if ((ret = read(fd, buff, BUFF_SIZE)) > 0 && (ret + 1) % 21 == 0)
 	{
 		*tn = (ret + 1) / 21;
-		*tn = (*tn) ? *tn : 1; 
 		buff[ret] = '\0';
 		tet_a = ft_str_to_arr(buff, *tn);
 	}
 	else
+	{
+		free(buff);
 		return (NULL);
+	}
 	free(buff);
 	return (tet_a);
 }
