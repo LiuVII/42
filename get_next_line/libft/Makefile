@@ -78,7 +78,11 @@ LIB_FUNCS	+= 	ft_atof.c\
 				ft_strlcpy.c\
 				ft_strnchr.c\
 				ft_memrealloc.c\
-				ft_lstremoveif.c
+				ft_lstremoveif.c\
+				ft_bit_rev_print.c\
+				ft_mapmake.c\
+				ft_mapfree.c\
+				ft_memprint.c
 
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror
@@ -94,8 +98,8 @@ $(NAME): $(LIB_OBJS)
 build:
 	@mkdir build
 
-build/%.o: %.c libft.h | build
-	@$(CC) $(CFLAGS) -c $< -o $@
+build/%.o: %.c includes/libft.h | build
+	@$(CC) -I includes/ $(CFLAGS) -c $< -o $@
 
 clean:
 	@/bin/rm -rf build/

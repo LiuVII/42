@@ -44,8 +44,8 @@ static t_list	*ft_get_nbf(t_list **bfd, int fd)
 {
 	t_list			*new;
 
-	if (!bfd || !(*bfd))
-	{	
+	if (!(*bfd))
+	{
 		if (!(new = ft_lstnew(NULL, 0)))
 			return (NULL);
 		new->id = fd;
@@ -55,9 +55,9 @@ static t_list	*ft_get_nbf(t_list **bfd, int fd)
 	else if ((*bfd)->id != fd)
 	{
 		new = *bfd;
-		while (new->next)		
+		while (new->next)
 			if ((new = new->next)->id == fd)
-				return (new);		
+				return (new);
 		if (!(new->next = ft_lstnew(NULL, 0)))
 			return (NULL);
 		new->next->id = fd;
@@ -74,14 +74,15 @@ int				get_next_line(const int fd, char **line)
 	t_list			*nbf;
 	int				pos[2];
 
-	if (!line || fd < 0 || !(buf = (char*)ft_memalloc(B_S + 1)))
-		return (-1);	
+	if (!line || fd < 0 || !(buf = (char*)ft_memalloc(BUFF_SIZE + 1)))
+		return (-1);
 	pos[1] = 0;
 	pos[0] = 0;
 	nbf = ft_get_nbf(&bfd, fd);
 	*line = NULL;
-	while (buf[pos[1]] != '\n' && (ret = (bfd && nbf->content) ?
-		(int)ft_strlcpy(buf, nbf->content, B_S) : read(fd, buf, B_S)) > 0)
+	while (buf[pos[1]] != '\n' && (ret = (nbf && nbf->content) ?
+		(int)ft_strlcpy(buf, nbf->content, BUFF_SIZE)
+		: read(fd, buf, BUFF_SIZE)) > 0)
 	{
 		pos[1] = ft_strnchr(buf, ret, 10);
 		pos[1] = (pos[1] < 0) ? ret : pos[1];
