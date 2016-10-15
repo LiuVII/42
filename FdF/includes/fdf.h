@@ -16,6 +16,9 @@
 # include "libft.h"
 # include <fcntl.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <sys/uio.h>
+# include <fcntl.h>
 # include <math.h>
 
 # define KEY_ESC 53
@@ -49,9 +52,11 @@ typedef struct	s_vertex
 typedef struct	s_data
 {
 //	t_vertex	***image;
+	t_3d		***image;
+	t_3d		img_size;
 	void		*mlx;
 	void		*win;
-	t_3d		*O1;
+	t_3d		O1;
 	float		phi;
 	float		teta;
 	t_3d		zoom;
