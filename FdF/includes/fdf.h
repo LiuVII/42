@@ -23,6 +23,8 @@
 # define KEY_DOWN 125
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
+# define SIGN(x) ((x < 0.0) ? -1.0 : 1.0)
+# define ABS(x) (x * SIGN(x))
 
 typedef struct	s_2d
 {
@@ -46,13 +48,15 @@ typedef struct	s_vertex
 
 typedef struct	s_data
 {
-	t_vertex	***image;
+//	t_vertex	***image;
 	void		*mlx;
 	void		*win;
 	t_3d		*O1;
 	float		phi;
 	float		teta;
-	t_vertex	*xyz1;
+	t_3d		zoom;
+	t_2d		Oz;
+//	t_vertex	*xyz1;
 }				t_data;
 
 #endif
