@@ -12,15 +12,15 @@
 
 #include "libft.h"
 
-static int		ft_freenret(int ret, int buf_flag, char **buf, char **nbf)
+static int		ft_freenret(int ret, int line_len, char **buf, char **nbf)
 {
-	(buf_flag && buf && *buf) ? free(*buf) : 0;
+	(buf && *buf) ? free(*buf) : 0;
 	if (ret <= 0 && nbf && *nbf)
 	{
 		free(*nbf);
 		*nbf = 0;
 	}
-	if (ret == -1 || ret == 0)
+	if (ret == -1 || (ret == 0 && line_len == 0))
 		return (ret);
 	return (1);
 }
@@ -68,28 +68,28 @@ static t_list	*ft_get_nbf(t_list **bfd, int fd)
 int				get_next_line(const int fd, char **line)
 {
 	int				ret;
-	char			*buf;
+	char			*bf;
 	static t_list	*bfd;
 	t_list			*nbf;
 	int				pos[2];
 
-	if (!line || fd < 0 || !(buf = (char*)ft_memalloc(BUFF_SIZE + 1)))
+	if (!line || fd < 0 || BUFF_SIZE < 1
+		||!(bf = (char*)ft_memalloc(BUFF_SIZE + 1)))
 		return (-1);
 	pos[1] = 0;
 	pos[0] = 0;
 	nbf = ft_get_nbf(&bfd, fd);
-	*line = NULL;
-	while (buf[pos[1]] != '\n' && (ret = (nbf && nbf->content) ?
-		(int)ft_strlcpy(buf, nbf->content, BUFF_SIZE)
-		: read(fd, buf, BUFF_SIZE)) > 0)
+	*line = ft_strndup("", 0);
+	while (bf[pos[1]] != '\n' && (ret = (nbf && nbf->content) ? (int)
+		ft_strlcpy(bf, nbf->content, BUFF_SIZE) : read(fd, bf, BUFF_SIZE)) > 0)
 	{
-		pos[1] = ft_strnchr(buf, ret, 10);
+		pos[1] = ft_strnchr(bf, ret, 10);
 		pos[1] = (pos[1] < 0) ? ret : pos[1];
 		if (!(*line = (char*)ft_memrealloc(*line, pos[0] + pos[1] + 1, pos[0])))
-			return (ft_freenret(-1, 1, &buf, (char**)&(nbf->content)));
-		ft_strncpy(&(*line)[pos[0]], buf, pos[1]);
-		nbf->content = ft_set_nbf(ret, pos[1], buf, nbf->content);
+			return (ft_freenret(-1, 0, &bf, (char**)&(nbf->content)));
+		ft_strncpy(&(*line)[pos[0]], bf, pos[1]);
+		nbf->content = ft_set_nbf(ret, pos[1], bf, nbf->content);
 		pos[0] += pos[1];
 	}
-	return (ft_freenret(ret, 1, &buf, (char**)&(nbf->content)));
+	return (ft_freenret(ret, ft_strlen(*line), &bf, (char**)&(nbf->content)));
 }

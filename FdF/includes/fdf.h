@@ -21,6 +21,8 @@
 # include <fcntl.h>
 # include <math.h>
 
+# define XS 1024
+# define YS 768
 # define KEY_ESC 53
 # define KEY_UP 126
 # define KEY_DOWN 125
@@ -60,8 +62,18 @@ typedef struct	s_data
 	float		phi;
 	float		teta;
 	t_3d		zoom;
+	float		scale;
 	t_2d		Oz;
 //	t_vertex	*xyz1;
 }				t_data;
+
+int		ft_key_hook(int keycode, t_data *data);
+int		ft_mouse_hook(int button, int x, int y, t_data *data);
+int		ft_read(char *filename, t_data *data);
+void	ft_draw_image(t_data *data);
+t_3d	ft_rotate(t_3d p, float phi, float teta);
+t_3d	ft_zoom(t_3d p, t_3d zoom, t_2d Oz);
+t_3d	ft_scale(t_3d p, float scale);
+t_3d	ft_translate(t_3d p, t_3d tr);
 
 #endif

@@ -12,7 +12,11 @@
 
 NAME		=	fdf
 
-FUNCS		+=	main.c
+FUNCS		+=	main.c\
+				hooks.c\
+				TRS.c\
+				render.c\
+				ft_read.c
 
 LIBFT		=	./libft/libft.a
 LIBINC		=	-I./libft
