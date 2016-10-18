@@ -36,22 +36,22 @@ t_3d	ft_rotate(t_3d p, float phi, float teta)
 	return (np);
 }
 
-t_3d	ft_zoom(t_3d p, t_3d zoom, t_2d Oz)
+t_3d	ft_zoom(t_3d p, float zoom, t_2d Oz)
 {
 	t_3d np;
 
-	np.x = XS / 2 + (p.x - Oz.x) * zoom.x;
-	np.y = YS / 2 + (p.y - Oz.y) * zoom.y;
-	np.z = p.z * zoom.z;
+	np.x = XS / 2 + (p.x - Oz.x) * zoom;
+	np.y = YS / 2 + (p.y - Oz.y) * zoom;
+	np.z = p.z;
 	return (np);
 }
 
-t_3d	ft_scale(t_3d p, float scale)
+t_3d	ft_scale(t_3d p, t_3d scale)
 {
 	t_3d np;
 
-	np.x = p.x * scale;
-	np.y = p.y * scale;
-	np.z = p.z * scale;
+	np.x = p.x * scale.x;
+	np.y = p.y * scale.y;
+	np.z = p.z * scale.z;
 	return (np);
 }

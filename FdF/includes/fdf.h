@@ -21,7 +21,6 @@
 # include <fcntl.h>
 # include <math.h>
 
-# define M_GUARD(x) ((!x) ? (return (-1)) : 0)
 # define XS 1024
 # define YS 768
 # define ZS 100
@@ -60,11 +59,12 @@ typedef struct	s_data
 	t_3d		img_size;
 	void		*mlx;
 	void		*win;
+	//void		*img;
 	t_3d		O1;
 	float		phi;
 	float		teta;
-	t_3d		zoom;
-	float		scale;
+	float		zoom;
+	t_3d		scale;
 	t_2d		Oz;
 	float		zmin;
 	float		zmax;
@@ -77,8 +77,8 @@ int		ft_mouse_hook(int button, int x, int y, t_data *data);
 int		ft_read(char *filename, t_data *data);
 void	ft_draw_image(t_data *data);
 t_3d	ft_rotate(t_3d p, float phi, float teta);
-t_3d	ft_zoom(t_3d p, t_3d zoom, t_2d Oz);
-t_3d	ft_scale(t_3d p, float scale);
+t_3d	ft_zoom(t_3d p, float zoom, t_2d Oz);
+t_3d	ft_scale(t_3d p, t_3d scale);
 t_3d	ft_translate(t_3d p, t_3d tr);
 
 #endif

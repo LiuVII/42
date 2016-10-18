@@ -87,7 +87,10 @@ t_3d	p_trans(t_data *data, t_3d p)
 {
 	t_3d	np;
 
-	np = ft_translate(ft_rotate(ft_scale(p, data->scale), data->phi, data->teta), data->O1);
+	//np = ft_translate(ft_rotate(ft_scale(p, data->scale), data->phi, data->teta), data->O1);
+	np = ft_zoom(ft_translate(ft_rotate(ft_scale(p, data->scale),
+		data->phi, data->teta), data->O1), data->zoom, data->Oz);
+	//np = ft_translate(ft_rotate(ft_zoom(p, data->zoom), data->phi, data->teta), data->O1);
 	np.z = get_color(data->zmin, data->zmax, data->zmean, p.z);
 	return (np);
 }
@@ -105,7 +108,7 @@ void	ft_draw_image(t_data *data)
 		while (++j < data->img_size.y && (k = -1))
 			while (++k < data->img_size.x)
 			{
-				//printf("0 DRAW ALL 0");
+				//printf(" %d,%d,%d ", i , j, k);
 				p1 = p_trans(data, data->image[i][j][k]);
 				if (i > 0) 
 					ft_draw_line(data, p1, p_trans(data, data->image[i - 1][j][k]));
