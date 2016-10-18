@@ -26,13 +26,13 @@ t_3d	ft_rotate(t_3d p, float phi, float teta)
 {
 	t_3d np;
 
-	p.x = p.x - XS / 2;
-	p.y = YS / 2 - p.y;
+	// p.x = p.x - XS / 2;
+	// p.y = YS / 2 - p.y;
 	np.x = cos(teta) * p.x - sin(teta) * (sin(phi) * p.y + cos (phi) * p.z);
 	np.y = cos(phi) * p.y - sin (phi) * p.z;
 	np.z = sin(teta) * p.x + cos(teta) * (sin(phi) * p.y + cos (phi) * p.z);
-	np.x = np.x + XS / 2;
-	np.y = YS / 2 - np.y;
+	// np.x = np.x + XS / 2;
+	// np.y = YS / 2 - np.y;
 	return (np);
 }
 

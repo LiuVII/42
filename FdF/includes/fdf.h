@@ -21,15 +21,17 @@
 # include <fcntl.h>
 # include <math.h>
 
+# define M_GUARD(x) ((!x) ? (return (-1)) : 0)
 # define XS 1024
 # define YS 768
+# define ZS 100
 # define KEY_ESC 53
 # define KEY_UP 126
 # define KEY_DOWN 125
 # define KEY_LEFT 123
 # define KEY_RIGHT 124
 # define SIGN(x) ((x < 0.0) ? -1.0 : 1.0)
-# define ABS(x) (x * SIGN(x))
+# define ABS(x) ((x) * SIGN(x))
 
 typedef struct	s_2d
 {
@@ -64,6 +66,9 @@ typedef struct	s_data
 	t_3d		zoom;
 	float		scale;
 	t_2d		Oz;
+	float		zmin;
+	float		zmax;
+	float		zmean;
 //	t_vertex	*xyz1;
 }				t_data;
 

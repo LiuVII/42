@@ -40,7 +40,10 @@ int main(int argc, char **argv)
 	data->zoom.y = 1;
 	data->phi = 0;
 	data->teta = 0;
-	data->scale = 5;
+	data->zmin = 1000;
+	data->zmax = -1000;
+	data->zmean = 0;
+	data->scale = 25;
 	//data->image = NULL;
 	if (ft_read(argv[1], data) < 0)
 	{
