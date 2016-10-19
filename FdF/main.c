@@ -13,14 +13,16 @@
 #include "fdf.h"
 #include <stdio.h>
 
+// void	ft_set_image(t_data *data)
+// {
+
+// 	ft_drawit(t_data *data);
+
+// }
 
 int main(int argc, char **argv)
 {
 	t_data *data;
-	//char	*img_oo;
-	//int		bpp;
-	//int		ls;
-	//int		endian;
 
 	if (!(data = (t_data*)malloc(sizeof(t_data))))
 		return (-1);
@@ -56,16 +58,12 @@ int main(int argc, char **argv)
 		return (-1);		
 	}
 	if (data->zmax != data->zmin)
-		data->scale.z = ((YS > XS) ? XS : YS) / (data->zmax - data->zmin) / 3;
+		data->scale.z = ((YS > XS) ? XS : YS) / (data->zmax - data->zmin) / 5;
 	if (data->img_size.x != 1)
 		data->scale.x = (XS) / data->img_size.x / 1.4;
 	if (data->img_size.y != 1)
 		data->scale.y = (YS) / data->img_size.y / 1.4;
-	//color = 0x00FFFFFF;
-	//ft_draw_grid(data, data->O1.x, data->O1.y, 50, 10, 10);
-	ft_draw_image(data);
-	//data->img = mlx_new_image(data->mlx, XS, YS);
-	//img_oo = mlx_get_data_addr(data->img, &bpp, &ls, &endian);
+	ft_drawit(data);
 	mlx_mouse_hook(data->win, ft_mouse_hook, data);
 	mlx_key_hook(data->win, ft_key_hook, data);
 	mlx_loop(data->mlx);

@@ -15,7 +15,7 @@ NAME		=	fdf
 FUNCS		+=	main.c\
 				hooks.c\
 				TRS.c\
-				render.c\
+				ft_draw.c\
 				ft_read.c
 
 LIBFT		=	./libft/libft.a

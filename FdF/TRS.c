@@ -26,13 +26,9 @@ t_3d	ft_rotate(t_3d p, float phi, float teta)
 {
 	t_3d np;
 
-	// p.x = p.x - XS / 2;
-	// p.y = YS / 2 - p.y;
 	np.x = cos(teta) * p.x - sin(teta) * (sin(phi) * p.y + cos (phi) * p.z);
 	np.y = cos(phi) * p.y - sin (phi) * p.z;
 	np.z = sin(teta) * p.x + cos(teta) * (sin(phi) * p.y + cos (phi) * p.z);
-	// np.x = np.x + XS / 2;
-	// np.y = YS / 2 - np.y;
 	return (np);
 }
 
@@ -53,5 +49,15 @@ t_3d	ft_scale(t_3d p, t_3d scale)
 	np.x = p.x * scale.x;
 	np.y = p.y * scale.y;
 	np.z = p.z * scale.z;
+	return (np);
+}
+
+t_3d	p_trans(t_data *data, t_3d p)
+{
+	t_3d	np;
+
+	np = ft_zoom(ft_translate(ft_rotate(ft_scale(p, data->scale),
+		data->phi, data->teta), data->O1), data->zoom, data->Oz);
+	np.z = get_color(data->zmin, data->zmax, data->zmean, p.z);
 	return (np);
 }

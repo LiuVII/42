@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <stdio.h>
 
 float	set_mean(t_data *data)
 {
@@ -109,6 +108,5 @@ int	ft_read(char *filename, t_data *data)
 	if (ft_split_n_rec(data, img_list, rows) < 0)
 		return (-1);
 	data->zmean = set_mean(data);
-	//printf("%f\n", data->zmean);
 	return (0);	
 }

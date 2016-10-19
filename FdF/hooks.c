@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <stdio.h>
 
 void	ft_free_n_exit(t_data *data)
 {
@@ -33,37 +32,29 @@ void	ft_free_n_exit(t_data *data)
 
 int	ft_key_hook(int keycode, t_data *data)
 {
-	if (keycode == 53)
-		ft_free_n_exit(data);
-	else if (keycode == 126)
-		data->O1.y += 10;
-	else if (keycode == 125)
-		data->O1.y -= 10;
-	else if (keycode == 123)
-		data->O1.x += 10;
-	else if (keycode == 124)
-		data->O1.x -= 10;
-	else if (keycode == 86)
-		data->phi += 0.05;
-	else if (keycode == 83)
-		data->phi -= 0.05;
-	else if (keycode == 87)
-		data->teta += 0.05;
-	else if (keycode == 84)
-		data->teta -= 0.05;
-	else if (keycode == 69)
-		data->zoom *= 1.2;
-	else if (keycode == 78)
-		data->zoom /= 1.2;
-	else if (keycode == 36)
+	(keycode == KEY_ESC) ? ft_free_n_exit(data) : 0;
+	(keycode == KEY_UP) ? data->O1.y += 10 : 0;
+	(keycode == KEY_DOWN) ?	data->O1.y -= 10 : 0;
+	(keycode == KEY_LEFT) ?	data->O1.x += 10 : 0;
+	(keycode == KEY_RIGHT) ? data->O1.x -= 10 : 0;
+	(keycode == KEY_4) ? data->phi += 0.05 : 0;
+	(keycode == KEY_1) ? data->phi -= 0.05 : 0;
+	(keycode == KEY_5) ? data->teta -= 0.05 : 0;
+	(keycode == KEY_2) ? data->teta += 0.05 : 0;
+	(keycode == KEY_PLUS) ? data->zoom *= 1.2 : 0;
+	(keycode == KEY_MINUS) ? data->zoom /= 1.2 : 0;
+	if (keycode == KEY_E)
 	{
-		printf ("X: %f, Y: %f\n", data->O1.x, data->O1.y);
-		printf ("Phi: %f, Teta: %f\n", (data->phi * 180 / M_PI), (data->teta * 180 / M_PI));
-		printf("Zoom: %f\n", data->zoom);
+		data->phi = 0;
+		data->teta= 0;
 	}
-	//ft_draw_grid(data, data->O1.x, data->O1.y, 50, 10, 10);
-	ft_draw_image(data);
-	//printf ("key event %d\n", keycode);
+	if (keycode == KEY_I)
+	{
+		data->phi = M_PI * (35.264 / 180);
+		data->teta= M_PI / 4 ;
+	}
+	ft_drawit(data);
+	//ft_putnbr(keycode);
 	return (0);
 }
 
@@ -78,10 +69,6 @@ int	ft_mouse_hook(int button, int x, int y, t_data *data)
 		data->zoom *= 1.2;
 	else if (button == 4)
 		data->zoom /= 1.2;
-	//ft_draw_grid(data, data->O1.x, data->O1.y, 50, 10, 10);
-	ft_draw_image(data);
-	//data->O1.x += XS / 2 - data->Oz.x;
-	//data->O1.y += YS / 2 - data->Oz.y;
-	//printf ("mouse event %d\n", button);
+	ft_drawit(data);
 	return (0);
 }
