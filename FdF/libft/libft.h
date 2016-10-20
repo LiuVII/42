@@ -21,7 +21,7 @@ typedef	struct	s_list
 {
 	void			*content;
 	int				id;
-	size_t			content_size;
+	size_t			c_s;
 	struct s_list	*next;
 }				t_list;
 
@@ -82,7 +82,7 @@ void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-t_list			*ft_lstnew(void const *content, size_t content_size);
+t_list			*ft_lstnew(void const *content, size_t c_s);
 int				ft_isspace(int c);
 double			ft_atof(const char *nptr);
 long double		ft_power(double base, int power);
@@ -95,7 +95,8 @@ void			ft_memprint(const void *addr, size_t size);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 size_t			ft_strnchr(char *buf, size_t size, int c);
 void			*ft_memrealloc(void *src, size_t n_size, size_t size);
-void			ft_lstremoveif(t_list **begin_list, void *data_ref, int (*cmp)());
+void			ft_lstremoveif(t_list **begin_list,
+	void *data_ref, int (*cmp)());
 int				get_next_line(const int fd, char **line);
 void			ft_lstclr(t_list **begin_list);
 

@@ -74,7 +74,7 @@ int				get_next_line(const int fd, char **line)
 	int				pos[2];
 
 	if (!line || fd < 0 || BUFF_SIZE < 1
-		||!(bf = (char*)ft_memalloc(BUFF_SIZE + 1)))
+		|| !(bf = (char*)ft_memalloc(BUFF_SIZE + 1)))
 		return (-1);
 	pos[1] = 0;
 	pos[0] = 0;

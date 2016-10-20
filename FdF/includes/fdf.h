@@ -42,31 +42,31 @@
 
 typedef struct	s_2d
 {
-	float	x;
-	float	y;
+	float		x;
+	float		y;
 }				t_2d;
 
 typedef struct	s_3d
 {
-	float	x;
-	float	y;
-	float	z;
+	float		x;
+	float		y;
+	float		z;
 }				t_3d;
 
 typedef struct	s_data
 {
-	t_3d		***image;
+	t_3d		***img;
 	t_3d		img_size;
 	void		*mlx;
 	void		*win;
-	void		*img;
-	char		*img0;
-	t_3d		O1;
+	void		*img_p;
+	char		*img_p0;
+	t_3d		o1;
 	float		phi;
 	float		teta;
 	float		zoom;
 	t_3d		scale;
-	t_2d		Oz;
+	t_2d		oz;
 	float		zmin;
 	float		zmax;
 	float		zmean;
@@ -75,12 +75,12 @@ typedef struct	s_data
 	int			endian;
 }				t_data;
 
-int		ft_key_hook(int keycode, t_data *data);
-int		ft_mouse_hook(int button, int x, int y, t_data *data);
-int		ft_read(char *filename, t_data *data);
-void	ft_free_n_exit(t_data *data, t_list **img_list, char *list, int err);
-int		ft_drawit(t_data *data);
-t_3d	p_trans(t_data *data, t_3d p);
-int		get_color(float zmin, float zmax, float zmean, float z);
+int				ft_key_hook(int keycode, t_data *d);
+int				ft_mouse_hook(int button, int x, int y, t_data *d);
+int				ft_read(char *filename, t_data *d);
+void			ft_free_n_exit(t_data *d, t_list **img_l, char *list, int err);
+int				ft_drawit(t_data *d);
+t_3d			ft_tr(t_data *d, t_3d p);
+int				get_color(float zmin, float zmax, float zmean, float z);
 
 #endif

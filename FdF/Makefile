@@ -14,7 +14,7 @@ NAME		=	fdf
 
 FUNCS		+=	main.c\
 				hooks.c\
-				TRS.c\
+				ft_trs.c\
 				ft_draw.c\
 				ft_read.c
 
