@@ -12,27 +12,9 @@
 
 #include "fdf.h"
 
-void	ft_free_n_exit(t_data *data)
-{
-	int i;
-	int j;
-
-	mlx_destroy_window(data->mlx, data->win);
-	i = -1;
-	while (++i < data->img_size.z && (j = -1))
-	{
-		while (++j < data->img_size.y)
-			free(data->image[i][j]);
-		free(data->image[i]);
-	}
-	free(data->image);
-	(data->mlx) ? free(data->mlx) : 0;
-	exit(0);
-}
-
 int	ft_key_hook(int keycode, t_data *data)
 {
-	(keycode == KEY_ESC) ? ft_free_n_exit(data) : 0;
+	(keycode == KEY_ESC) ? ft_free_n_exit(data, NULL, NULL, 0) : 0;
 	(keycode == KEY_UP) ? data->O1.y += 10 : 0;
 	(keycode == KEY_DOWN) ?	data->O1.y -= 10 : 0;
 	(keycode == KEY_LEFT) ?	data->O1.x += 10 : 0;
@@ -54,7 +36,6 @@ int	ft_key_hook(int keycode, t_data *data)
 		data->teta= M_PI / 4 ;
 	}
 	ft_drawit(data);
-	//ft_putnbr(keycode);
 	return (0);
 }
 

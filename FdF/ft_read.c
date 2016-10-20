@@ -33,32 +33,31 @@ float	set_mean(t_data *data)
 	return (sum / points);
 }
 
-static int	ft_read_to_list(int fd, t_list **img_list)
+static int	ft_read_to_list(int fd, t_list **img_list, t_data *data)
 {
-	t_list	*tmp;	
+	t_list	*tmp;
 	char	*line;
 	int		ret;
 	int		rows;
 
-	ret = -1;
 	rows = 0;
-	while ((ret = get_next_line(fd, &line)) > 0)
-	{
+	line = NULL;
+	while ((ret = get_next_line(fd, &line)) > 0 && ++rows)
 		if (!(*img_list))
 		{
-			*img_list = ft_lstnew(line, ft_strlen(line) + 1);
+			if (!(*img_list = ft_lstnew(line, ft_strlen(line) + 1)))
+				ft_free_n_exit(data, img_list, line, -5);
 			tmp = *img_list;
 		}
 		else
 		{
 			if (!(tmp->next = ft_lstnew(line, ft_strlen(line) + 1)))
-				return (-1);
-			tmp = tmp->next;		
+				ft_free_n_exit(data, img_list, line, -5);
+			tmp = tmp->next;
 		}
-		rows++;
-	}
+	(line) ? free(line) : 0;
 	if (ret == -1)
-		return (-1);
+		ft_free_n_exit(data, img_list, NULL, -4);
 	return (rows);
 }
 
@@ -69,12 +68,11 @@ static int	ft_split_n_rec(t_data *data, t_list *img_list, int rows)
 	int		j;
 
 	i = -1;
-	while (++i < rows)
+	while (++i < rows && (j = -1))
 	{
 		if (!(tab_line = ft_strsplit(img_list->content, ' ')) ||
 			!((data->image)[0][i] = (t_3d*)ft_memalloc(sizeof(t_3d) * img_list->content_size)))
 			return (-1);
-		j = -1;
 		while (tab_line[++j])
 		{
 			(data->image)[0][i][j].z = ft_atoi(tab_line[j]);
@@ -83,8 +81,10 @@ static int	ft_split_n_rec(t_data *data, t_list *img_list, int rows)
 			(data->image)[0][i][j].x = j;
 			(data->image)[0][i][j].y = i;
 		}
-		data->img_size.x = j;
 		ft_mapfree(&tab_line);
+		if (i > 0 && data->img_size.x != j)
+			ft_free_n_exit(data, &img_list, NULL, -10);
+		(i == 0) ? (data->img_size.x = j) : 0;
 		img_list = img_list->next;
 	}
 	return (0);
@@ -97,16 +97,19 @@ int	ft_read(char *filename, t_data *data)
 	t_list	*img_list;
 
 	img_list = NULL;
-	if ((fd = open(filename, O_RDONLY)) < 0 ||
-		(rows = ft_read_to_list(fd, &img_list)) <= 0 ||
-		!(data->image = (t_3d***)ft_memalloc(sizeof(t_3d**))))
-		return (-1);
+	if ((fd = open(filename, O_RDONLY)) < 0)
+		ft_free_n_exit(data, &img_list, NULL, -4);
+	if	((rows = ft_read_to_list(fd, &img_list, data)) <= 0)
+		ft_free_n_exit(data, &img_list, NULL, -10);
+	if	(!(data->image = (t_3d***)ft_memalloc(sizeof(t_3d**))))
+		ft_free_n_exit(data, &img_list, NULL, -5);
 	data->img_size.z = 1;
 	if (!((data->image)[0] = (t_3d**)ft_memalloc(sizeof(t_3d*) * rows)))
-		return (-1);
+		ft_free_n_exit(data, &img_list, NULL, -5);
 	data->img_size.y = rows;
 	if (ft_split_n_rec(data, img_list, rows) < 0)
-		return (-1);
+		ft_free_n_exit(data, &img_list, NULL, -5);
 	data->zmean = set_mean(data);
-	return (0);	
+	ft_lstclr(&img_list);
+	return (0);
 }

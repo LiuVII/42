@@ -97,5 +97,6 @@ size_t			ft_strnchr(char *buf, size_t size, int c);
 void			*ft_memrealloc(void *src, size_t n_size, size_t size);
 void			ft_lstremoveif(t_list **begin_list, void *data_ref, int (*cmp)());
 int				get_next_line(const int fd, char **line);
+void			ft_lstclr(t_list **begin_list);
 
 #endif

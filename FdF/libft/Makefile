@@ -83,7 +83,8 @@ LIB_FUNCS	+= 	ft_atof.c\
 				ft_strnchr.c\
 				ft_memrealloc.c\
 				ft_lstremoveif.c\
-				get_next_line.c
+				get_next_line.c\
+				ft_lstclr.c
 
 CC			=	gcc
 CFLAGS		=	-Wall -Wextra -Werror

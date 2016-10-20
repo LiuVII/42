@@ -78,8 +78,8 @@ typedef struct	s_data
 int		ft_key_hook(int keycode, t_data *data);
 int		ft_mouse_hook(int button, int x, int y, t_data *data);
 int		ft_read(char *filename, t_data *data);
-// void	ft_set_image(t_data *data);
-void	ft_drawit(t_data *data);
+void	ft_free_n_exit(t_data *data, t_list **img_list, char *list, int err);
+int		ft_drawit(t_data *data);
 t_3d	p_trans(t_data *data, t_3d p);
 int		get_color(float zmin, float zmax, float zmean, float z);
 

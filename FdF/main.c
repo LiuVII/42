@@ -13,31 +13,80 @@
 #include "fdf.h"
 #include <stdio.h>
 
-// void	ft_set_image(t_data *data)
-// {
-
-// 	ft_drawit(t_data *data);
-
-// }
-
-int main(int argc, char **argv)
+void	displayit(t_data *data)
 {
-	t_data *data;
+	ft_putstr("\
+	____________________________\n\
+	CONTROLS:\n\
+	Translation:\n\
+		Y: Key: UP, DOWN\n\
+		X: Key: LEFT, RIGHT\n\n\
+	Rotation:\n\
+		X: Numpad: 1, 4\n\
+		Y: Numpad: 2, 5\n\n\
+	Zoom:\n\
+		IN: Numpad: + | Mouse scroll\n\
+		OUT: Numpad: -| Mouse scroll\n\n\
+	Projections:\n\
+		Elevation (init): E\n\
+		Isometric: Key: I\n\n\
+	Center:\n\
+		Mouse click: Btn 1, Btn 2\n\
+	____________________________\n\
+	");
+	//ft_drawit(data);
+	mlx_expose_hook(data->win, ft_drawit, data);
+	mlx_mouse_hook(data->win, ft_mouse_hook, data);
+	mlx_key_hook(data->win, ft_key_hook, data);
+	mlx_loop(data->mlx);	
+}
 
-	if (!(data = (t_data*)malloc(sizeof(t_data))))
-		return (-1);
-	if (!(argc > 1 && argv[1]))
-		return (-1);
-	if (!(data->mlx = mlx_init()))
+
+void	ft_puterr_msg(int err)
+{
+	if (err == -1)
+		ft_putendl("usage: .fdf/ $(FILENAME)");
+	else if (err == -2)
+		ft_putendl("error: mlx initializing failed");
+	else if (err == -3)
+		ft_putendl("error: window initializing failed");
+	else if (err == -4)
+		ft_putendl("error: while opening/reading a file");
+	else if (err == -5)
+		ft_putendl("error: memory allocation");
+	else if (err == -10)
+		ft_putendl("error: invalid map");
+	else
+		ft_putendl("error: unknown");
+}
+
+void	ft_free_n_exit(t_data *data, t_list **img_list, char *line, int err)
+{
+	int i;
+	int j;
+
+	(data && data->mlx && data->win) ? mlx_destroy_window(data->mlx, data->win) : 0;
+	i = -1;
+	if (data && data->image)
 	{
-		fprintf(stderr, "An error occured while initializing\n");
-		return (-1);
+		while (++i < data->img_size.z && (j = -1))
+		{
+			while (++j < data->img_size.y)
+				free(data->image[i][j]);
+			free(data->image[i]);
+		}
+		free(data->image);
 	}
-	if (!(data->win = mlx_new_window(data->mlx, XS, YS, argv[1])))
-	{
-		fprintf(stderr, "An error occured while creating window\n");
-		return (-1);		
-	}
+	(data && data->mlx) ? free(data->mlx) : 0;
+	(data) ? free(data) : 0;
+	(img_list && *img_list) ? ft_lstclr(img_list) : 0;
+	(line) ? free(line) : 0;
+	(err < 0) ? ft_puterr_msg(err) : 0;
+	(err >= 0) ? exit(0) : exit(1);
+}
+
+void	data_init(t_data *data)
+{
 	data->O1.x = 100;
 	data->O1.y = 100;
 	data->Oz.x = XS / 2;
@@ -52,20 +101,35 @@ int main(int argc, char **argv)
 	data->scale.y = 25;
 	data->scale.z = 25;
 	data->image = NULL;
-	if (ft_read(argv[1], data) < 0)
+	data->img_size.x = 0;
+	data->img_size.y = 0;
+	data->img_size.z = 0;
+}
+
+int		main(int argc, char **argv)
+{
+	t_data *data;
+
+	if (!(argc > 1 && argv[1]))
 	{
-		fprintf(stderr, "An error occured while reading\n");
-		return (-1);		
+		ft_puterr_msg(-1);
+		return (1);
 	}
-	if (data->zmax != data->zmin)
+	if (!(data = (t_data*)malloc(sizeof(t_data))))
+	{
+		ft_puterr_msg(-5);
+		return (1);
+	}
+	data_init(data);
+	if (!(data->mlx = mlx_init()))
+		ft_free_n_exit(data, NULL, NULL, -2);
+	if (!(data->win = mlx_new_window(data->mlx, XS, YS, argv[1])))
+		ft_free_n_exit(data, NULL, NULL, -3);
+	ft_read(argv[1], data);
+	if (data->zmax > data->zmin) 
 		data->scale.z = ((YS > XS) ? XS : YS) / (data->zmax - data->zmin) / 5;
-	if (data->img_size.x != 1)
-		data->scale.x = (XS) / data->img_size.x / 1.4;
-	if (data->img_size.y != 1)
-		data->scale.y = (YS) / data->img_size.y / 1.4;
-	ft_drawit(data);
-	mlx_mouse_hook(data->win, ft_mouse_hook, data);
-	mlx_key_hook(data->win, ft_key_hook, data);
-	mlx_loop(data->mlx);
+	(data->img_size.x > 1) ? (data->scale.x = (XS) / data->img_size.x / 1.4) : 0;
+	(data->img_size.y > 1) ? (data->scale.y = (YS) / data->img_size.y / 1.4) : 0;
+	displayit(data);
 	return (0);
 }
