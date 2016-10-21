@@ -76,12 +76,10 @@ void	data_init(t_data *d)
 	d->zoom = 1;
 	d->phi = 0;
 	d->teta = 0;
-	d->zmin = 1000;
-	d->zmax = -1000;
-	d->zmean = 0;
 	d->scale.x = 25;
 	d->scale.y = 25;
 	d->scale.z = 25;
+	d->iter = 42;
 }
 
 int		main(int argc, char **argv)
@@ -99,14 +97,11 @@ int		main(int argc, char **argv)
 		return (1);
 	}
 	data_init(d);
+	d->param = ft_atoi(argv[1]);
 	if (!(d->mlx = mlx_init()))
 		ft_free_n_exit(d, -2);
 	if (!(d->win = mlx_new_window(d->mlx, XS, YS, argv[1])))
 		ft_free_n_exit(d, -3);
-	if (d->zmax > d->zmin)
-		d->scale.z = ((YS > XS) ? XS : YS) / (d->zmax - d->zmin) / 5;
-	(d->img_size.x > 1) ? (d->scale.x = (XS) / d->img_size.x / 1.4) : 0;
-	(d->img_size.y > 1) ? (d->scale.y = (YS) / d->img_size.y / 1.4) : 0;
 	ft_displayit(d);
 	return (0);
 }

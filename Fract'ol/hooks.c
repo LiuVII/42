@@ -23,8 +23,8 @@ int	ft_key_hook(int keycode, t_data *d)
 	(keycode == KEY_1) ? d->phi -= 0.05 : 0;
 	(keycode == KEY_5) ? d->teta -= 0.05 : 0;
 	(keycode == KEY_2) ? d->teta += 0.05 : 0;
-	(keycode == KEY_PLUS) ? d->zoom *= 1.2 : 0;
-	(keycode == KEY_MINUS) ? d->zoom /= 1.2 : 0;
+	(keycode == KEY_PLUS) ? d->iter++ : 0;
+	(keycode == KEY_MINUS) ? d->iter-- : 0;
 	if (keycode == KEY_E)
 	{
 		d->phi = 0;

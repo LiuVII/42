@@ -21,8 +21,8 @@
 # include <fcntl.h>
 # include <math.h>
 
-# define XS 500
-# define YS 500
+# define XS 1000
+# define YS 1000
 # define ZS 100
 # define KEY_ESC 53
 # define KEY_UP 126
@@ -42,33 +42,31 @@
 
 typedef struct	s_2d
 {
-	float		x;
-	float		y;
+	double		x;
+	double		y;
 }				t_2d;
 
 typedef struct	s_3d
 {
-	float		x;
-	float		y;
-	float		z;
+	double		x;
+	double		y;
+	double		z;
 }				t_3d;
 
 typedef struct	s_data
 {
-	t_3d		img_size;
+	int			iter;
 	void		*mlx;
 	void		*win;
 	void		*img_p;
 	char		*img_p0;
 	t_3d		o1;
-	float		phi;
-	float		teta;
-	float		zoom;
+	double		phi;
+	double		teta;
+	double		zoom;
 	t_3d		scale;
 	t_2d		oz;
-	float		zmin;
-	float		zmax;
-	float		zmean;
+	int			param;
 	int			bpp;
 	int			ls;
 	int			endian;
@@ -80,6 +78,6 @@ int				ft_read(char *filename, t_data *d);
 void			ft_free_n_exit(t_data *d, int err);
 int				ft_drawit(t_data *d);
 t_3d			ft_tr(t_data *d, t_3d p);
-int				get_color(float zmin, float zmax, float zmean, float z);
+int				get_color(double zmin, double zmax, double zmean, double z);
 
 #endif
