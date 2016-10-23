@@ -41,15 +41,23 @@ int	ft_key_hook(int keycode, t_data *d)
 
 int	ft_mouse_hook(int button, int x, int y, t_data *d)
 {
-	if (button == 1 || button == 2)
+	if (button == 2)
 	{
 		d->o1.x += (XS / 2 - x) / d->zoom;
 		d->o1.y += (YS / 2 - y) / d->zoom;
 	}
 	if (button == 5)
+	{
+		d->o1.x -= x / d->zoom * (1 - 1 / 1.2);
+		d->o1.y -= y / d->zoom * (1 - 1 / 1.2);	
 		d->zoom *= 1.2;
+	}
 	else if (button == 4)
+	{
+		d->o1.x -= x / d->zoom * (1 - 1.2);
+		d->o1.y -= y / d->zoom * (1 - 1.2);
 		d->zoom /= 1.2;
+	}
 	ft_drawit(d);
 	return (0);
 }

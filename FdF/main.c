@@ -85,8 +85,8 @@ void	ft_free_n_exit(t_data *d, t_list **img_l, char *line, int err)
 
 void	data_init(t_data *d)
 {
-	d->o1.x = 100;
-	d->o1.y = 100;
+	d->o1.x = 0;
+	d->o1.y = 0;
 	d->oz.x = XS / 2;
 	d->oz.y = YS / 2;
 	d->zoom = 1;

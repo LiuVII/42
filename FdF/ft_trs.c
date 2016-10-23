@@ -36,8 +36,9 @@ t_3d	ft_zoom(t_3d p, float zoom, t_2d oz)
 {
 	t_3d	np;
 
-	np.x = XS / 2 + (p.x - oz.x) * zoom;
-	np.y = YS / 2 + (p.y - oz.y) * zoom;
+	oz.x = oz.x;
+	np.x = p.x * zoom;
+	np.y = p.y * zoom;
 	np.z = p.z;
 	return (np);
 }
