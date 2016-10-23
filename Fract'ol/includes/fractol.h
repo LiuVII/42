@@ -21,8 +21,8 @@
 # include <fcntl.h>
 # include <math.h>
 
-# define XS 1000
-# define YS 1000
+# define XS 600
+# define YS 600
 # define ZS 100
 # define KEY_ESC 53
 # define KEY_UP 126
@@ -33,6 +33,8 @@
 # define KEY_1 83
 # define KEY_5 87
 # define KEY_2 84
+# define KEY_7 89
+# define KEY_8 91
 # define KEY_PLUS 69
 # define KEY_MINUS 78
 # define KEY_E 14
@@ -69,6 +71,7 @@ typedef struct	s_data
 	int			param;
 	int			bpp;
 	int			ls;
+	int			cshift;
 	int			endian;
 }				t_data;
 

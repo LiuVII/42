@@ -79,7 +79,8 @@ void	data_init(t_data *d)
 	d->scale.x = 25;
 	d->scale.y = 25;
 	d->scale.z = 25;
-	d->iter = 42;
+	d->iter = 84;
+	d->cshift = 0;
 }
 
 int		main(int argc, char **argv)
