@@ -41,8 +41,10 @@ int	ft_key_hook(int keycode, t_data *d)
 	return (0);
 }
 
-int	ft_mouse_hook(int button, int x, int y, t_data *d)
+int	ft_mouse_down(int button, int x, int y, t_data *d)
 {
+	if (d->param == 2 && x >= 0 && x <= XS && y >= 0 && YS <= YS)
+		d->mevent = button;
 	if (button == 2)
 	{
 		d->o1.x += (XS / 2 - x) / d->zoom;
@@ -60,8 +62,35 @@ int	ft_mouse_hook(int button, int x, int y, t_data *d)
 		d->o1.y -= y / d->zoom * (1 - 1.2);
 		d->zoom /= 1.2;
 	}
-	d->oz.x = x;
-	d->oz.y = y;
 	ft_drawit(d);
-	return (0);
+	return(0);
+}
+
+int	ft_mouse_up(int button, int x, int y, t_data *d)
+{
+	if (button)
+		d->mevent = 0 * (x - y);
+	return(0);
+}
+
+int	ft_mouse_move(int x, int y, t_data *d)
+{
+	if (d->param == 2 && d->mevent == 1 && x >= 0 && x <= XS && y >= 0 && YS <= YS)
+	{
+		d->oz.x = x;
+		d->oz.y = y;
+		ft_drawit(d);
+	}	
+	return(0);
+}
+
+int	ft_mouse_drag(int x, int y, t_data *d)
+{
+	if (d->mevent == 1 && d->param == 2 && x >= 0 && x <= XS && y >= 0 && YS <= YS)
+	{
+		d->oz.x = x;
+		d->oz.y = y;
+		ft_drawit(d);
+	}	
+	return(0);
 }

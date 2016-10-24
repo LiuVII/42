@@ -73,9 +73,14 @@ typedef struct	s_data
 	int			ls;
 	int			cshift;
 	int			endian;
+	int			mevent;
 }				t_data;
 
 int				ft_key_hook(int keycode, t_data *d);
+int				ft_mouse_move(int x, int y, t_data *d);
+int				ft_mouse_down(int button, int x, int y, t_data *d);
+int				ft_mouse_up(int button, int x, int y, t_data *d);
+int				ft_mouse_drag(int x, int y, t_data *d);
 int				ft_mouse_hook(int button, int x, int y, t_data *d);
 int				ft_read(char *filename, t_data *d);
 void			ft_free_n_exit(t_data *d, int err);

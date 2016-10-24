@@ -35,8 +35,10 @@ void	ft_displayit(t_data *d)
 // ____________________________\n\
 // 	");
 	mlx_expose_hook(d->win, ft_drawit, d);
-	mlx_mouse_hook(d->win, ft_mouse_hook, d);
 	mlx_key_hook(d->win, ft_key_hook, d);
+	mlx_hook(d->win, 4, 1, ft_mouse_down, d);
+	mlx_hook(d->win, 6, 1, ft_mouse_drag, d);
+	mlx_hook(d->win, 5, 1, ft_mouse_up, d);
 	mlx_loop(d->mlx);
 }
 
