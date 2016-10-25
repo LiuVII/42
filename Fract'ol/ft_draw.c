@@ -12,6 +12,7 @@
 
 #include "fractol.h"
 #include <stdio.h>
+#define	EPS 0.001
 
 int		HSVtoRGB(float hue, float sat, float val)
 {
@@ -124,9 +125,83 @@ void 	draw_juliaset(t_data *d, int iter)
 		}
 }
 
+int		chk_roots(int param, t_2d z, t_2d zsqr)
+{
+	double temp1;
+	double temp2;
+	// int n_root;
+
+	if (param / 10 == 3)
+	{
+		if ((zsqr.x - 2.0 * z.x + 1.0 + zsqr.y) <= EPS)
+			return (1);
+		if ((zsqr.x + z.x + zsqr.y + 1.0 - sqrt(3) * z.y) <= EPS)
+			return (2);
+		if ((zsqr.x + z.x + zsqr.y + 1.0 + sqrt(3) * z.y) <= EPS)
+			return (3);
+	}
+	else if (param / 10 == 4)
+	{
+		z.y = z.y;
+		temp2 = pow(z.x, 3);
+		temp1 = temp2 * z.x;
+		z.x = z.x - (temp1 * temp1 + 15 * temp1 - 16) / (8 * temp1 * temp2 + 60 * temp2);	
+	}	
+	else if (param / 10 == 5 && z.x != 0)
+	{
+		z.y = z.y;
+		temp2 = pow(z.x, 3);
+		temp1 = temp2 * z.x;
+		z.x = z.x - (temp1 * temp1 + 15 * temp1 - 16) / (8 * temp1 * temp2 + 60 * temp2);
+	}
+	else if (param / 10 == 6)
+	{
+		temp1 = fmod(z.x, M_PI);
+		temp2 = fmod(z.y, M_PI);
+		if ((temp1 * temp1 + temp2 * temp2) <= EPS)
+			return (z.x / M_PI + z.y / M_PI);
+	}
+	return (0);	
+}
+
+void	newton_iter(int param, t_2d *z, t_2d zsqr)
+{
+	double temp1;
+	double temp2;
+
+	if (param / 10 == 3 && zsqr.y + zsqr.x != 0)
+	{
+		z->y = z->y - (z->y + 2.0 * z->x * z->y / (zsqr.x + zsqr.y) / (zsqr.x + zsqr.y)) / 3.0;
+		z->x = z->x - (z->x - (zsqr.x - zsqr.y) / (zsqr.x + zsqr.y) / (zsqr.x + zsqr.y)) / 3.0;	
+	}
+	if (param / 10 == 4)
+	{
+		z->y = z->y;
+		temp2 = pow(z->x, 3);
+		temp1 = temp2 * z->x;
+		z->x = z->x - (temp1 * temp1 + 15 * temp1 - 16) / (8 * temp1 * temp2 + 60 * temp2);	
+	}	
+	if (param / 10 == 5 && z->x != 0)
+	{
+		z->y = z->y;
+		temp2 = pow(z->x, 3);
+		temp1 = temp2 * z->x;
+		z->x = z->x - (temp1 * temp1 + 15 * temp1 - 16) / (8 * temp1 * temp2 + 60 * temp2);
+	}
+	if (param / 10 == 6)
+	{
+		// temp1 = z->y;
+		temp2 = cos(z->x) * cos(z->x) * cosh(z->y) * cosh(z->y) + sin(z->x) * sin(z->x) * sinh(z->y) * sinh(z->y);
+		if (temp2 != 0)
+		{
+			z->y = z->y - 0.5 * (/*cos(2 * z->x) * */sinh(2 * z->y) / temp2);
+			z->x = z->x - 0.5 * (sin(2 * z->x) /** cosh(2 * temp1)*// temp2);
+		}
+	}
+}
+
 void 	draw_newtonset(t_data *d, int iter)
 {
-	t_3d	c;
 	t_2d	z;
 	t_2d	p;
 	t_2d	zsqr;
@@ -138,27 +213,25 @@ void 	draw_newtonset(t_data *d, int iter)
 		{
 			z.x = 3.5 * (p.x / d->zoom - d->o1.x) / XS;
 			z.y = 3.5 * (p.y / d->zoom - d->o1.y) / YS;
-			c.x = -1;
-			c.y = 0;
 			zsqr.x = z.x * z.x;
 			zsqr.y = z.y * z.y;
-			while (++color < iter && zsqr.y + zsqr.x != 0 && (zsqr.x - 2.0 * z.x + 1.0 + zsqr.y) > 0.01 &&
-				(zsqr.x + z.x + zsqr.y + 1.0 - sqrt(3) * z.y) > 0.01 && (zsqr.x + z.x + zsqr.y + 1.0 + sqrt(3) * z.y) > 0.01)
+			while (++color < iter && !chk_roots(d->param, z, zsqr))
 			{
-				z.y = z.y - (z.y + 2.0 * z.x * z.y / (zsqr.x + zsqr.y) / (zsqr.x + zsqr.y)) / 3.0;
-				z.x = z.x - (z.x - (zsqr.x - zsqr.y) / (zsqr.x + zsqr.y) / (zsqr.x + zsqr.y)) / 3.0;
+				newton_iter(d->param, &z, zsqr);
 				zsqr.x = z.x * z.x;
 				zsqr.y = z.y * z.y;
 			}
-			color = iter - color;
-			if ((zsqr.x - 2.0 * z.x + 1.0 + zsqr.y) <= 0.01)
-				ft_draw_pixel(d, p.x, p.y, 0x00FF0000);
-			else if ((zsqr.x + z.x + zsqr.y + 1.0 - sqrt(3) * z.y) <= 0.01)
-				ft_draw_pixel(d, p.x, p.y, 0x0000FF00);
-			else if ((zsqr.x + z.x + zsqr.y + 1.0 + sqrt(3) * z.y) <= 0.01)
-				ft_draw_pixel(d, p.x, p.y, 0x000000FF);
-			// ft_draw_pixel(d, p.x, p.y, HSVtoRGB(fmod((((float)color + d->cshift) / 200) * 6, 6),
-			// 	1, (fmod((((float)color + d->cshift) / 400) * 6, 0.5) + 0.5) * (color != 0)));
+			if (d->param % 2 == 0)
+			{
+				ft_draw_pixel(d, p.x, p.y, HSVtoRGB(fmod((((float)chk_roots(d->param, z, zsqr) + d->cshift) / 1) * 6, 6),
+				1, (fmod((((float)color + d->cshift) / 100) * 6, 1))));
+				// ((zsqr.x - 2 * z.x + 1 + zsqr.y) <= EPS) ? ft_draw_pixel(d, p.x, p.y, (255 - color / iter) << 16) : 0;
+				// ((zsqr.x + z.x + zsqr.y + 1 - sqrt(3) * z.y) <= EPS) ? ft_draw_pixel(d, p.x, p.y, (255 - color / iter) << 8) : 0;
+				// ((zsqr.x + z.x + zsqr.y + 1.0 + sqrt(3) * z.y) <= EPS) ? ft_draw_pixel(d, p.x, p.y, 255 - color / iter) : 0;
+			}
+			else
+				ft_draw_pixel(d, p.x, p.y, HSVtoRGB(fmod((((float)color + d->cshift) / 100) * 6, 6),
+				1, (fmod((((float)color + d->cshift) / 100) * 6, 0.5) + 0.5)));
 		}
 }
 
