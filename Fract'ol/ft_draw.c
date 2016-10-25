@@ -76,7 +76,7 @@ void 	draw_mandelset(t_data *d, int iter)
 
 	p.y = -1;
 	while (++p.y <= YS && (p.x = -1))
-		while (++p.x <= XS)
+		while (++p.x <= XS && (color = -1))
 		{
 			c.x = 3.5 * (p.x / d->zoom - d->o1.x) / XS;
 			c.y = 3.5 * (p.y / d->zoom - d->o1.y) / YS;
@@ -84,22 +84,12 @@ void 	draw_mandelset(t_data *d, int iter)
 			z.y = 0;
 			zsqr.x = 0;
 			zsqr.y = 0;
-			color = -1;
-			while (++color < iter && zsqr.x + zsqr.y <= 4)
+			while (++color < iter && zsqr.x + (zsqr.y = z.y * z.y) <= 4)
 			{
-				z.y += z.x;
-				z.y = z.y * z.y - zsqr.x - zsqr.y + c.y;
+				z.y = (z.y + z.x) * (z.y + z.x) - zsqr.x - zsqr.y + c.y;
 				z.x = zsqr.x - zsqr.y + c.x;
 				zsqr.x = z.x * z.x;
-				zsqr.y = z.y * z.y;
-				// if (zsqr.x == z.x && zsqr.y == z.y)
-				// {
-				// 	color = iter;
-				// 	break ;
-				// }
 			}
-			//ft_draw_pixel(d, p.x, p.y, ((color > 1) ? (color != iter) * (g_col_tab[((color / 20) * 4 + d->cshift) % 394].color * fmod((20 - color), 20) +
-			//	g_col_tab[((color / 20) * 4 + d->cshift + 1) % 394].color * fmod(color, 20)) : 0x00bfff));
 			ft_draw_pixel(d, p.x, p.y, HSVtoRGB(fmod((((float)color + d->cshift) / 200) * 6, 6),
 				(fmod((((float)color + d->cshift) / 400) * 6, 0.5) + 0.5), 1 * (color < iter)));
 		}
@@ -114,27 +104,61 @@ void 	draw_juliaset(t_data *d, int iter)
 	int		color;
 
 	p.y = -1;
-	c.z = 0;
 	while (++p.y <= YS && (p.x = -1))
-		while (++p.x <= XS)
+		while (++p.x <= XS && (color = -1))
 		{
 			z.x = 3.5 * (p.x / d->zoom - d->o1.x) / XS;
 			z.y = 3.5 * (p.y / d->zoom - d->o1.y) / YS;
 			c.x = 3.5 * (d->oz.x - XS / 2) / XS;
 			c.y = 3.5 * (d->oz.y - YS / 2) / YS;
-			color = -1;
 			zsqr.x = z.x * z.x;
 			zsqr.y = z.y * z.y;
-			while (++color < iter && zsqr.x + zsqr.y <= 4)
+			while (++color < iter && zsqr.x + (zsqr.y = z.y * z.y) <= 4)
 			{
-				z.y += z.x;
-				z.y = z.y * z.y - zsqr.x - zsqr.y + c.y;
+				z.y = (z.y + z.x) * (z.y + z.x) - zsqr.x - zsqr.y + c.y;
 				z.x = zsqr.x - zsqr.y + c.x;
 				zsqr.x = z.x * z.x;
-				zsqr.y = z.y * z.y;
 			}
 			ft_draw_pixel(d, p.x, p.y, HSVtoRGB(fmod((((float)color + d->cshift) / 200) * 6, 6),
 				1, (fmod((((float)color + d->cshift) / 400) * 6, 0.5) + 0.5) * (color < iter)));
+		}
+}
+
+void 	draw_newtonset(t_data *d, int iter)
+{
+	t_3d	c;
+	t_2d	z;
+	t_2d	p;
+	t_2d	zsqr;
+	int		color;
+
+	p.y = -1;
+	while (++p.y <= YS && (p.x = -1))
+		while (++p.x <= XS && (color = -1))
+		{
+			z.x = 3.5 * (p.x / d->zoom - d->o1.x) / XS;
+			z.y = 3.5 * (p.y / d->zoom - d->o1.y) / YS;
+			c.x = -1;
+			c.y = 0;
+			zsqr.x = z.x * z.x;
+			zsqr.y = z.y * z.y;
+			while (++color < iter && zsqr.y + zsqr.x != 0 && (zsqr.x - 2.0 * z.x + 1.0 + zsqr.y) > 0.01 &&
+				(zsqr.x + z.x + zsqr.y + 1.0 - sqrt(3) * z.y) > 0.01 && (zsqr.x + z.x + zsqr.y + 1.0 + sqrt(3) * z.y) > 0.01)
+			{
+				z.y = z.y - (z.y + 2.0 * z.x * z.y / (zsqr.x + zsqr.y) / (zsqr.x + zsqr.y)) / 3.0;
+				z.x = z.x - (z.x - (zsqr.x - zsqr.y) / (zsqr.x + zsqr.y) / (zsqr.x + zsqr.y)) / 3.0;
+				zsqr.x = z.x * z.x;
+				zsqr.y = z.y * z.y;
+			}
+			color = iter - color;
+			if ((zsqr.x - 2.0 * z.x + 1.0 + zsqr.y) <= 0.01)
+				ft_draw_pixel(d, p.x, p.y, 0x00FF0000);
+			else if ((zsqr.x + z.x + zsqr.y + 1.0 - sqrt(3) * z.y) <= 0.01)
+				ft_draw_pixel(d, p.x, p.y, 0x0000FF00);
+			else if ((zsqr.x + z.x + zsqr.y + 1.0 + sqrt(3) * z.y) <= 0.01)
+				ft_draw_pixel(d, p.x, p.y, 0x000000FF);
+			// ft_draw_pixel(d, p.x, p.y, HSVtoRGB(fmod((((float)color + d->cshift) / 200) * 6, 6),
+			// 	1, (fmod((((float)color + d->cshift) / 400) * 6, 0.5) + 0.5) * (color != 0)));
 		}
 }
 
@@ -146,6 +170,8 @@ int		ft_drawit(t_data *d)
 		draw_mandelset(d, d->iter);
 	else if (d->param == 2)
 		draw_juliaset(d, d->iter);
+	else
+		draw_newtonset(d, d->iter / 2);
 	mlx_clear_window(d->mlx, d->win);
 	mlx_put_image_to_window(d->mlx, d->win, d->img_p, 0, 0);
 	mlx_destroy_image(d->mlx, d->img_p);
