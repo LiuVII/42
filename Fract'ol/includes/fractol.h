@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   fractol.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilipch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mfilipch <mfilipch@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/23 15:27:50 by mfilipch          #+#    #+#             */
 /*   Updated: 2016/09/23 15:27:52 by mfilipch         ###   ########.fr       */
@@ -71,7 +71,7 @@ typedef struct	s_data
 	int			param;
 	int			bpp;
 	int			ls;
-	int			cshift;
+	int			clr;
 	int			endian;
 	int			mevent;
 }				t_data;
@@ -85,7 +85,12 @@ int				ft_mouse_hook(int button, int x, int y, t_data *d);
 int				ft_read(char *filename, t_data *d);
 void			ft_free_n_exit(t_data *d, int err);
 int				ft_drawit(t_data *d);
+void			draw_pixel(t_data *d, int x, int y, int c);
+void			draw_newtonset(t_data *d, int iter);
+void			draw_juliaset(t_data *d, int iter);
+void			draw_mandelset(t_data *d, int iter);
 t_3d			ft_tr(t_data *d, t_3d p);
 int				get_color(double zmin, double zmax, double zmean, double z);
+int				hsv_rgb(float hue, float sat, float val);
 
 #endif

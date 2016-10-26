@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   hooks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilipch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mfilipch <mfilipch@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/15 22:00:05 by mfilipch          #+#    #+#             */
 /*   Updated: 2016/10/15 22:00:06 by mfilipch         ###   ########.fr       */
@@ -23,8 +23,8 @@ int	ft_key_hook(int keycode, t_data *d)
 	(keycode == KEY_1) ? d->phi -= 0.05 : 0;
 	(keycode == KEY_5) ? d->teta -= 0.05 : 0;
 	(keycode == KEY_2) ? d->teta += 0.05 : 0;
-	(keycode == KEY_7) ? d->cshift += 5 : 0;
-	(keycode == KEY_8) ? d->cshift -= 5 : 0;
+	(keycode == KEY_7) ? d->clr += 5 : 0;
+	(keycode == KEY_8) ? d->clr -= 5 : 0;
 	(keycode == KEY_PLUS) ? d->iter++ : 0;
 	(keycode == KEY_MINUS) ? d->iter-- : 0;
 	if (keycode == KEY_E)
@@ -53,7 +53,7 @@ int	ft_mouse_down(int button, int x, int y, t_data *d)
 	if (button == 5)
 	{
 		d->o1.x -= x / d->zoom * (1 - 1 / 1.2);
-		d->o1.y -= y / d->zoom * (1 - 1 / 1.2);	
+		d->o1.y -= y / d->zoom * (1 - 1 / 1.2);
 		d->zoom *= 1.2;
 	}
 	else if (button == 4)
@@ -63,34 +63,36 @@ int	ft_mouse_down(int button, int x, int y, t_data *d)
 		d->zoom /= 1.2;
 	}
 	ft_drawit(d);
-	return(0);
+	return (0);
 }
 
 int	ft_mouse_up(int button, int x, int y, t_data *d)
 {
 	if (button)
 		d->mevent = 0 * (x - y);
-	return(0);
+	return (0);
 }
 
 int	ft_mouse_move(int x, int y, t_data *d)
 {
-	if (d->param == 2 && d->mevent == 1 && x >= 0 && x <= XS && y >= 0 && YS <= YS)
+	if (d->param == 2 && d->mevent == 1 && x >= 0
+		&& x <= XS && y >= 0 && y <= YS)
 	{
 		d->oz.x = x;
 		d->oz.y = y;
 		ft_drawit(d);
-	}	
-	return(0);
+	}
+	return (0);
 }
 
 int	ft_mouse_drag(int x, int y, t_data *d)
 {
-	if (d->mevent == 1 && d->param == 2 && x >= 0 && x <= XS && y >= 0 && YS <= YS)
+	if (d->mevent == 1 && d->param == 2 && x >= 0
+		&& x <= XS && y >= 0 && y <= YS)
 	{
 		d->oz.x = x;
 		d->oz.y = y;
 		ft_drawit(d);
-	}	
-	return(0);
+	}
+	return (0);
 }

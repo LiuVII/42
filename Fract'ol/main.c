@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfilipch <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mfilipch <mfilipch@student.42.us.org>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/13 14:48:15 by mfilipch          #+#    #+#             */
 /*   Updated: 2016/10/13 14:48:18 by mfilipch         ###   ########.fr       */
@@ -13,27 +13,27 @@
 #include "fractol.h"
 #include <stdio.h>
 
-void	ft_displayit(t_data *d)
+void	ft_displayit(t_data *d, int flag)
 {
-// 	ft_putstr("\
-// ____________________________\n\
-// CONTROLS:\n\
-// Translation:\n\
-// 	Y: Key: UP, DOWN\n\
-// 	X: Key: LEFT, RIGHT\n\n\
-// Rotation:\n\
-// 	X: Numpad: 1, 4\n\
-// 	Y: Numpad: 2, 5\n\n\
-// Zoom:\n\
-// 	IN: Numpad: + | Mouse scroll\n\
-// 	OUT: Numpad: -| Mouse scroll\n\n\
-// Projections:\n\
-// 	Elevation (init): E\n\
-// 	Isometric: Key: I\n\n\
-// Center:\n\
-// 	Mouse click: Btn 1, Btn 2\n\
-// ____________________________\n\
-// 	");
+	ft_putstr("\
+____________________________________\n\
+PARAMETERS:\n\
+Mandelbrot Set : 1\n\
+Julia Set      : 2\n\
+Newton Set (mode root or mode iter):\n\
+	z^3-1      : 30 OR 31\n\
+	cosh(z)-1  : 40 OR 41\n\
+	sin(z)     : 50 OR 51\n\n\
+CONTROLS:\n\
+Translation:\n\
+	Y: Key: UP, DOWN\n\
+	X: Key: LEFT, RIGHT\n\n\
+Zoom:\n\
+	IN-OUT : mouse scroll\n\n\
+Center:\n\
+	Mouse click: Btn 2\n\
+____________________________________\n");
+	(flag == 0) ? ft_free_n_exit(d, -1) : 0;
 	mlx_expose_hook(d->win, ft_drawit, d);
 	mlx_key_hook(d->win, ft_key_hook, d);
 	mlx_hook(d->win, 4, 1, ft_mouse_down, d);
@@ -82,7 +82,7 @@ void	data_init(t_data *d)
 	d->scale.y = 25;
 	d->scale.z = 25;
 	d->iter = 84;
-	d->cshift = 0;
+	d->clr = 0;
 }
 
 int		main(int argc, char **argv)
@@ -105,6 +105,10 @@ int		main(int argc, char **argv)
 		ft_free_n_exit(d, -2);
 	if (!(d->win = mlx_new_window(d->mlx, XS, YS, argv[1])))
 		ft_free_n_exit(d, -3);
-	ft_displayit(d);
+	if (d->param == 1 || d->param == 2 ||
+		(d->param >= 30 && d->param <= 51 && d->param % 10 < 2))
+		ft_displayit(d, 1);
+	else
+		ft_displayit(d, 0);
 	return (0);
 }
