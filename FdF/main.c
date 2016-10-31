@@ -37,6 +37,7 @@ ____________________________\n\
 	mlx_expose_hook(d->win, ft_drawit, d);
 	mlx_mouse_hook(d->win, ft_mouse_hook, d);
 	mlx_key_hook(d->win, ft_key_hook, d);
+	mlx_hook(d->win, 17, 1, ft_close, d);
 	mlx_loop(d->mlx);
 }
 
@@ -95,6 +96,9 @@ void	data_init(t_data *d)
 	d->zmin = 1000;
 	d->zmax = -1000;
 	d->zmean = 0;
+	d->cmin = 0X000000FF;
+	d->cmean = 0X00FFFFFF;
+	d->cmax = 0X00FF0000;
 	d->scale.x = 25;
 	d->scale.y = 25;
 	d->scale.z = 25;

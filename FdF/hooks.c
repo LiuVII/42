@@ -12,6 +12,12 @@
 
 #include "fdf.h"
 
+int	ft_close(t_data *d)
+{
+	ft_free_n_exit(d, NULL, NULL, 0);
+	return (0);
+}
+
 int	ft_key_hook(int keycode, t_data *d)
 {
 	(keycode == KEY_ESC) ? ft_free_n_exit(d, NULL, NULL, 0) : 0;

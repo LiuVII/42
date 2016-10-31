@@ -70,17 +70,22 @@ typedef struct	s_data
 	float		zmin;
 	float		zmax;
 	float		zmean;
+	int			cmin;
+	int			cmax;
+	int			cmean;
 	int			bpp;
 	int			ls;
 	int			endian;
 }				t_data;
 
 int				ft_key_hook(int keycode, t_data *d);
+int				ft_close(t_data *d);
 int				ft_mouse_hook(int button, int x, int y, t_data *d);
 int				ft_read(char *filename, t_data *d);
 void			ft_free_n_exit(t_data *d, t_list **img_l, char *list, int err);
 int				ft_drawit(t_data *d);
 t_3d			ft_tr(t_data *d, t_3d p);
-int				get_color(float zmin, float zmax, float zmean, float z);
+int				get_color(t_data *d, float z);
+// int				get_color(float zmin, float zmax, float zmean, float z);
 
 #endif

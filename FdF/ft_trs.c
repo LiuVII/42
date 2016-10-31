@@ -59,6 +59,7 @@ t_3d	ft_tr(t_data *d, t_3d p)
 
 	np = ft_zoom(ft_translate(ft_rotate(ft_scale(p, d->scale),
 		d->phi, d->teta), d->o1), d->zoom, d->oz);
-	np.z = get_color(d->zmin, d->zmax, d->zmean, p.z);
+	// np.z = get_color(d->zmin, d->zmax, d->zmean, p.z);
+	np.z =  get_color(d, p.z);
 	return (np);
 }
