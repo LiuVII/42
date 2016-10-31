@@ -16,6 +16,7 @@ FUNCS		+=	main.c\
 				hooks.c\
 				ft_trs.c\
 				ft_draw.c\
+				colors.c\
 				ft_read.c
 
 LIBFT		=	./libft/libft.a

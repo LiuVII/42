@@ -12,63 +12,6 @@
 
 #include "fdf.h"
 
-// int		get_color(float zmin, float zmax, float zmean, float z)
-// {
-// 	int		r;
-// 	int		g;
-// 	int		b;
-
-// 	g = (z > zmean) ? (int)((z - zmean) / (zmax - zmean) * 255) % 256 : 0;
-// 	(z < zmean) ? (g = (int)((z - zmean) / (zmin - zmean) * 255) % 256) : 0;
-// 	r = (z > zmean) ? 0 : g;
-// 	b = (z < zmean) ? 0 : g;
-// 	return (0x00FFFFFF - (r << 16) - (g << 8) - b);
-// }
-
-int		get_color(t_data *d, float z)
-{
-	int		c1;
-	int		c2;
-	float	ratio;
-
-	c1 = d->cmin;
-	c2 = d->cmax;
-	if (d->cmean >= 0 && z >= d->zmean)
-	{
-		c1 = d->cmean;
-		ratio = (z - d->zmean) / (d->zmax - d->zmean);
-	}
-	else if (d->cmean >= 0 && z < d->zmean)
-	{
-		c2 = d->cmean;
-		ratio = (z - d->zmin) / (d->zmean - d->zmin);
-	}
-	else
-	{
-		c1 = d->cmin;
-		ratio = (z - d->zmin) / (d->zmax - d->zmin);
-	}
-	z = (int)((((int)c2 >> 16) % 256 - ((int)c1 >> 16) % 256) * ratio + ((int)c1 >> 16) % 256) << 16;
-	z += (int)((((int)c2 >> 8) % 256 - ((int)c1 >> 8) % 256) * ratio + ((int)c1 >> 8) % 256) << 8;
-	z += (int)((((int)c2) % 256 - ((int)c1) % 256) * ratio + ((int)c1) % 256);
-	return (z);
-}
-
-int		set_color(t_3d p1, t_3d p2, t_3d p, int flag)
-{
-	float	ratio;
-
-	ratio = 0;
-	if (flag == 1)
-		ratio = (p.x - p1.x) / (p2.x - p1.x);
-	else if (flag == 2)
-		ratio = (p.y - p1.y) / (p2.y - p1.y);
-	p.z = (int)((((int)p2.z >> 16) % 256 - ((int)p1.z >> 16) % 256) * ratio + ((int)p1.z >> 16) % 256) << 16;
-	p.z += (int)((((int)p2.z >> 8) % 256 - ((int)p1.z >> 8) % 256) * ratio + ((int)p1.z >> 8) % 256) << 8;
-	p.z += (int)((((int)p2.z) % 256 - ((int)p1.z) % 256) * ratio + ((int)p1.z) % 256);
-	return (p.z);
-}
-
 void	ft_draw_pixel(t_data *d, int x, int y, int c)
 {
 	int		i;

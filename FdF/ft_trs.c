@@ -22,12 +22,14 @@ t_3d	ft_translate(t_3d p, t_3d tr)
 	return (np);
 }
 
-t_3d	ft_rotate(t_3d p, float phi, float teta)
+t_3d	ft_rotate(t_3d p, float phi, float teta, float psi)
 {
 	t_3d	np;
 
-	np.x = cos(teta) * p.x - sin(teta) * (sin(phi) * p.y + cos(phi) * p.z);
-	np.y = cos(phi) * p.y - sin(phi) * p.z;
+	np.x = cos(psi) * (cos(teta) * p.x - sin(teta) * (sin(phi) * p.y +
+		cos(phi) * p.z)) - sin(psi) * (cos(phi) * p.y - sin(phi) * p.z);
+	np.y = sin(psi) * (cos(teta) * p.x - sin(teta) * (sin(phi) * p.y +
+		cos(phi) * p.z)) + cos(psi) * (cos(phi) * p.y - sin(phi) * p.z);
 	np.z = sin(teta) * p.x + cos(teta) * (sin(phi) * p.y + cos(phi) * p.z);
 	return (np);
 }
@@ -57,9 +59,8 @@ t_3d	ft_tr(t_data *d, t_3d p)
 {
 	t_3d	np;
 
-	np = ft_zoom(ft_translate(ft_rotate(ft_scale(p, d->scale),
-		d->phi, d->teta), d->o1), d->zoom, d->oz);
-	// np.z = get_color(d->zmin, d->zmax, d->zmean, p.z);
-	np.z =  get_color(d, p.z);
+	np = ft_zoom(ft_translate(ft_rotate(ft_scale(ft_translate(p, d->crot),
+		d->scale), d->phi, d->teta, d->psi), d->o1), d->zoom, d->oz);
+	np.z = get_color(d, p.z);
 	return (np);
 }

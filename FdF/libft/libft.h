@@ -93,11 +93,13 @@ char			**ft_mapmake(int rows, int cols, char c);
 void			ft_bit_rev_print(void *addr, size_t size);
 void			ft_memprint(const void *addr, size_t size);
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
-size_t			ft_strnchr(char *buf, size_t size, int c);
+size_t			ft_strnchr(const char *buf, size_t size, int c);
 void			*ft_memrealloc(void *src, size_t n_size, size_t size);
 void			ft_lstremoveif(t_list **begin_list,
 	void *data_ref, int (*cmp)());
 int				get_next_line(const int fd, char **line);
 void			ft_lstclr(t_list **begin_list);
+int				ft_atoi_base(char *str, const char *base);
+char			*ft_itoa_base(int value, int base);
 
 #endif

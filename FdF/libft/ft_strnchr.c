@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-size_t			ft_strnchr(char *buf, size_t size, int c)
+size_t			ft_strnchr(const char *buf, size_t size, int c)
 {
 	size_t			i;
 

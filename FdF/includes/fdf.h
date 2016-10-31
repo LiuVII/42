@@ -33,6 +33,10 @@
 # define KEY_1 83
 # define KEY_5 87
 # define KEY_2 84
+# define KEY_6 88
+# define KEY_3 85
+# define KEY_7 89
+# define KEY_8 91
 # define KEY_PLUS 69
 # define KEY_MINUS 78
 # define KEY_E 14
@@ -62,8 +66,10 @@ typedef struct	s_data
 	void		*img_p;
 	char		*img_p0;
 	t_3d		o1;
+	t_3d		crot;
 	float		phi;
 	float		teta;
+	float		psi;
 	float		zoom;
 	t_3d		scale;
 	t_2d		oz;
@@ -73,19 +79,23 @@ typedef struct	s_data
 	int			cmin;
 	int			cmax;
 	int			cmean;
+	int			clr;
 	int			bpp;
 	int			ls;
 	int			endian;
+	int			mevent;
 }				t_data;
 
 int				ft_key_hook(int keycode, t_data *d);
 int				ft_close(t_data *d);
-int				ft_mouse_hook(int button, int x, int y, t_data *d);
+int				ft_mouse_down(int button, int x, int y, t_data *d);
+int				ft_mouse_up(int button, int x, int y, t_data *d);
+int				ft_mouse_drag(int x, int y, t_data *d);
 int				ft_read(char *filename, t_data *d);
 void			ft_free_n_exit(t_data *d, t_list **img_l, char *list, int err);
 int				ft_drawit(t_data *d);
 t_3d			ft_tr(t_data *d, t_3d p);
 int				get_color(t_data *d, float z);
-// int				get_color(float zmin, float zmax, float zmean, float z);
+int				set_color(t_3d p1, t_3d p2, t_3d p, int flag);
 
 #endif
