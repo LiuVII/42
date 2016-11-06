@@ -12,6 +12,12 @@
 
 #include "fractol.h"
 
+int	ft_close(t_data *d)
+{
+	ft_free_n_exit(d, 0);
+	return (0);
+}
+
 int	ft_key_hook(int keycode, t_data *d)
 {
 	(keycode == KEY_ESC) ? ft_free_n_exit(d, 0) : 0;
@@ -25,8 +31,8 @@ int	ft_key_hook(int keycode, t_data *d)
 	(keycode == KEY_2) ? d->teta += 0.05 : 0;
 	(keycode == KEY_7) ? d->clr += 5 : 0;
 	(keycode == KEY_8) ? d->clr -= 5 : 0;
-	(keycode == KEY_PLUS) ? d->iter++ : 0;
-	(keycode == KEY_MINUS) ? d->iter-- : 0;
+	(keycode == KEY_PLUS) ? d->iter += 1 : 0;
+	(keycode == KEY_MINUS) ? d->iter -= 3 : 0;
 	if (keycode == KEY_E)
 	{
 		d->phi = 0;
@@ -45,6 +51,7 @@ int	ft_mouse_down(int button, int x, int y, t_data *d)
 {
 	if (d->param == 2 && x >= 0 && x <= XS && y >= 0 && YS <= YS)
 		d->mevent = button;
+	(button == 1) ? d->iter += 3 : 0;
 	if (button == 2)
 	{
 		d->o1.x += (XS / 2 - x) / d->zoom;
@@ -70,18 +77,6 @@ int	ft_mouse_up(int button, int x, int y, t_data *d)
 {
 	if (button)
 		d->mevent = 0 * (x - y);
-	return (0);
-}
-
-int	ft_mouse_move(int x, int y, t_data *d)
-{
-	if (d->param == 2 && d->mevent == 1 && x >= 0
-		&& x <= XS && y >= 0 && y <= YS)
-	{
-		d->oz.x = x;
-		d->oz.y = y;
-		ft_drawit(d);
-	}
 	return (0);
 }
 

@@ -11,12 +11,10 @@
 /* ************************************************************************** */
 
 #include "fractol.h"
-#include <stdio.h>
 
 void	ft_displayit(t_data *d, int flag)
 {
-	ft_putstr("\
-____________________________________\n\
+	ft_putstr("____________________________________\n\
 PARAMETERS:\n\
 Mandelbrot Set : 1\n\
 Julia Set      : 2\n\
@@ -24,13 +22,12 @@ Newton Set (mode root or mode iter):\n\
 	z^3-1      : 30 OR 31\n\
 	cosh(z)-1  : 40 OR 41\n\
 	sin(z)     : 50 OR 51\n\n\
-CONTROLS:\n\
-Translation:\n\
+CONTROLS:\nRotate color palete:\n\
+	Numpad: 7, 8\n\
+	Mouse click: Btn 1\n\nTranslation:\n\
 	Y: Key: UP, DOWN\n\
-	X: Key: LEFT, RIGHT\n\n\
-Zoom:\n\
-	IN-OUT : mouse scroll\n\n\
-Center:\n\
+	X: Key: LEFT, RIGHT\n\nZoom:\n\
+	IN-OUT : mouse scroll\n\nCenter:\n\
 	Mouse click: Btn 2\n\
 ____________________________________\n");
 	(flag == 0) ? ft_free_n_exit(d, -1) : 0;
@@ -39,6 +36,7 @@ ____________________________________\n");
 	mlx_hook(d->win, 4, 1, ft_mouse_down, d);
 	mlx_hook(d->win, 6, 1, ft_mouse_drag, d);
 	mlx_hook(d->win, 5, 1, ft_mouse_up, d);
+	mlx_hook(d->win, 17, 1, ft_close, d);
 	mlx_loop(d->mlx);
 }
 
@@ -81,7 +79,7 @@ void	data_init(t_data *d)
 	d->scale.x = 25;
 	d->scale.y = 25;
 	d->scale.z = 25;
-	d->iter = 84;
+	d->iter = 70;
 	d->clr = 0;
 }
 

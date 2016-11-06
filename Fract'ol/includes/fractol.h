@@ -14,11 +14,7 @@
 # define FRACTOL_H
 # include "mlx.h"
 # include "libft.h"
-# include <fcntl.h>
 # include <unistd.h>
-# include <sys/types.h>
-# include <sys/uio.h>
-# include <fcntl.h>
 # include <math.h>
 
 # define XS 600
@@ -77,6 +73,7 @@ typedef struct	s_data
 }				t_data;
 
 int				ft_key_hook(int keycode, t_data *d);
+int				ft_close(t_data *d);
 int				ft_mouse_move(int x, int y, t_data *d);
 int				ft_mouse_down(int button, int x, int y, t_data *d);
 int				ft_mouse_up(int button, int x, int y, t_data *d);

@@ -36,20 +36,21 @@ int		get_color(t_data *d, float z)
 	float	hue;
 	float	r;
 
+	r = 0;
 	hue = fmod((ABS(d->clr) / 100.0) * 6.0, 6.0);
 	s = d->cmin + hsv_rgb(hue, 1, (d->clr != 0));
 	e = d->cmax + hsv_rgb(hue, 1, (d->clr != 0));
-	if (d->cmean >= 0 && z >= d->zmean)
+	if (d->cmean >= 0 && z > d->zmean)
 	{
 		s = d->cmean + hsv_rgb(hue, 1, (d->clr != 0));
 		r = (z - d->zmean) / (d->zmax - d->zmean);
 	}
-	else if (d->cmean >= 0 && z < d->zmean)
+	else if (d->cmean >= 0 && z <= d->zmean && d->zmean != d->zmin)
 	{
 		e = d->cmean + hsv_rgb(hue, 1, (d->clr != 0));
 		r = (z - d->zmin) / (d->zmean - d->zmin);
 	}
-	else
+	else if (d->zmax != d->zmin)
 		r = (z - d->zmin) / (d->zmax - d->zmin);
 	z = (int)(((e >> 16) % 256 - (s >> 16) % 256) * r + (s >> 16) % 256) << 16;
 	z += (int)(((e >> 8) % 256 - (s >> 8) % 256) * r + (s >> 8) % 256) << 8;
